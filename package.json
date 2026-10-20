@@ -1,0 +1,24 @@
+{
+  "name": "property-management-saas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-hostable residential property and tenant management app",
+  "engines": { "node": ">=20.11" },
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev:api": "npm run dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "typecheck": "npm run typecheck -w apps/api && npm run typecheck -w apps/web",
+    "lint": "eslint .",
+    "test": "npm run test -w apps/api && npm run test -w apps/web",
+    "db:migrate": "npm run db:migrate -w apps/api",
+    "db:seed": "npm run db:seed -w apps/api",
+    "audit:prod": "npm audit --omit=dev"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "typescript-eslint": "^8.18.1"
+  }
+}

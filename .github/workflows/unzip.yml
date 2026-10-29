@@ -1,0 +1,41 @@
+name: Unzip rentora.zip
+
+on:
+  workflow_dispatch:        # Actions tab theke "Run workflow" button diye chalabe
+  push:
+    paths:
+      - "rentora.zip"       # rentora.zip push korle auto chalabe
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Unzip rentora.zip
+        run: |
+          if [ ! -f rentora.zip ]; then
+            echo "rentora.zip repo-r root-e nai!"; exit 1
+          fi
+          unzip -q -o rentora.zip -d _unzipped
+          # zip-er vitore "rentora/" folder ache - setar content root-e anbo
+          if [ -d _unzipped/rentora ]; then
+            cp -a _unzipped/rentora/. .
+          else
+            cp -a _unzipped/. .
+          fi
+          rm -rf _unzipped rentora.zip
+          rm -rf __MACOSX
+
+      - name: Commit and push extracted files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "Kono change nai" && exit 0
+          git commit -m "Unzip rentora.zip"
+          git push
